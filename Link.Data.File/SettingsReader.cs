@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Link.Data.File
 {
+    [Serializable]
     public class SettingsReader : ISettingsReader
     {
         private JObject _json;
