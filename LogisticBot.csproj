@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\PackageDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -130,6 +131,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Link.Data.File\Link.Data.File.csproj">
+      <Project>{29E62887-D84B-4BF5-A9DA-E94626C1EDEF}</Project>
+      <Name>Link.Data.File</Name>
+    </ProjectReference>
     <ProjectReference Include="Link.Domain\Link.Domain.csproj">
       <Project>{4908D659-89C3-4C6B-B0D6-8E4BCCC39485}</Project>
       <Name>Link.Domain</Name>

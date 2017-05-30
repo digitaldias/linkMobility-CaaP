@@ -4,6 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Link.Domain.Contracts;
+using Link.Data.File;
 
 namespace LogisticBot.Dialogs
 {
@@ -12,9 +13,11 @@ namespace LogisticBot.Dialogs
     {
         IPackageManager _packageManager;
         string username;
+        private readonly ISettingsReader _settings;
 
         public RootDialog()
         {
+            _settings = new SettingsReader();
         }
 
         public Task StartAsync(IDialogContext context)
@@ -42,21 +45,14 @@ namespace LogisticBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result;
+            await context.Forward<object>(new PackageDialog(_settings), AfterPackageDialog, activity);
 
-            if (string.IsNullOrEmpty(username))
-            {
-                PromptDialog.Text(context, OnNameReceived, "What is your name?");
-            }
-            else
-            {
-                // calculate something for us to return
-                int length = (activity.Text ?? string.Empty).Length;
+        }
 
-                // return our reply to the user
-                await context.PostAsync($"You sent {activity.Text} which was {length} characters");
-
-                context.Wait(MessageReceivedAsync);
-            }
+        private async Task AfterPackageDialog(IDialogContext context, IAwaitable<object> result)
+        {
+            await Task.CompletedTask;
+            context.Wait(MessageReceivedAsync);
         }
 
         private async Task PackageIdReceived(IDialogContext context, IAwaitable<string> result)
@@ -65,7 +61,7 @@ namespace LogisticBot.Dialogs
 
             var packageInfo = await _packageManager.RetrievePackageInfoAsync(packageId);
 
-            if(packageInfo == null)
+            if (packageInfo == null)
             {
 
             }
