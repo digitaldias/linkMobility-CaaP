@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{274D4D85-BDC3-466D-BB49-2B8EB8F174D1}</ProjectGuid>
+    <ProjectGuid>{4908D659-89C3-4C6B-B0D6-8E4BCCC39485}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Link.Business</RootNamespace>
-    <AssemblyName>Link.Business</AssemblyName>
+    <RootNamespace>Link.Domain</RootNamespace>
+    <AssemblyName>Link.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,16 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionHandler.cs" />
-    <Compile Include="PackageManager.cs" />
-    <Compile Include="PackageValidator.cs" />
+    <Compile Include="Contracts\IExceptionHandler.cs" />
+    <Compile Include="Contracts\ILogger.cs" />
+    <Compile Include="Contracts\IPackageManager.cs" />
+    <Compile Include="Contracts\IPackageRepository.cs" />
+    <Compile Include="Contracts\IPackageValidator.cs" />
+    <Compile Include="Entities\Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Link.Domain\Link.Domain.csproj">
-      <Project>{4908d659-89c3-4c6b-b0d6-8e4bccc39485}</Project>
-      <Name>Link.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
