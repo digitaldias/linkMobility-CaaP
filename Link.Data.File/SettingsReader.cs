@@ -3,15 +3,10 @@ using Microsoft.Azure;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Link.Data.File
 {
-    [Serializable]
     public class SettingsReader : ISettingsReader
     {
         private JObject _json;
@@ -32,10 +27,11 @@ namespace Link.Data.File
 
         private string GetSettingFromJsonFile(string key)
         {
-            if (_json != null)
-                return _json[key].Value<string>();
+            if (_json == null)
+                LoadJsonFromFile();
 
-            LoadJsonFromFile();
+            if (_json == null)
+                return string.Empty;
 
             return _json[key].Value<string>();
         }
