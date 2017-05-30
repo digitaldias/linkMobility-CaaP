@@ -16,8 +16,8 @@ namespace LogisticBot.Dialogs
         public PackageDialog(ISettingsReader settings) 
             : base(new LuisService(new LuisModelAttribute(settings["luis.modelid"], settings["luis.subscriptionkey"])))
         {
-
         }
+
 
         [LuisIntent("Track package")]
         public async Task TrackPackage(IDialogContext context, LuisResult result)

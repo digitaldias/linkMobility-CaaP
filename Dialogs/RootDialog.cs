@@ -11,22 +11,24 @@ namespace LogisticBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        IPackageManager _packageManager;
         string username;
-        private readonly ISettingsReader _settings;
 
-        public RootDialog()
-        {
-            _settings = new SettingsReader();
-        }
 
         public Task StartAsync(IDialogContext context)
         {
-
             context.Wait(MessageReceivedAsync);
-
             return Task.CompletedTask;
         }
+
+
+        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var activity = await result;
+            var settings = WebApiApplication.IoCResolver.GetInstance<ISettingsReader>();
+
+            await context.Forward<object>(new PackageDialog(settings), AfterPackageDialog, activity);
+        }
+
 
         private async Task OnNameReceived(IDialogContext context, IAwaitable<string> result)
         {
@@ -42,12 +44,6 @@ namespace LogisticBot.Dialogs
             context.Wait(MessageReceivedAsync);
         }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var activity = await result;
-            await context.Forward<object>(new PackageDialog(_settings), AfterPackageDialog, activity);
-
-        }
 
         private async Task AfterPackageDialog(IDialogContext context, IAwaitable<object> result)
         {
@@ -55,11 +51,13 @@ namespace LogisticBot.Dialogs
             context.Wait(MessageReceivedAsync);
         }
 
+
         private async Task PackageIdReceived(IDialogContext context, IAwaitable<string> result)
         {
+            var packageManager = WebApiApplication.IoCResolver.GetInstance<IPackageManager>();
             var packageId = await result;
 
-            var packageInfo = await _packageManager.RetrievePackageInfoAsync(packageId);
+            var packageInfo = await packageManager.RetrievePackageInfoAsync(packageId);
 
             if (packageInfo == null)
             {
