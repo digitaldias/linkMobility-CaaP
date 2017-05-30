@@ -22,7 +22,13 @@ namespace LogisticBot.Dialogs
         private async Task OnNameReceived(IDialogContext context, IAwaitable<string> result)
         {
             username = await result;
-            await context.PostAsync($"Hello,{username} what can I do for you?");
+
+            var images = new[] { new CardImage("https://www.dhl.de/content/dam/dhlde/images/paket-neu/2014/header-720/Paket_720x233.jpg", "A person") };
+            var card = new HeroCard($"Hello, {username}", "Welcome to the DHL Bot!", "I can help you do this, and that. Here are some suggestions to get you started...", images);
+
+            var reply = context.MakeMessage();
+            reply.Attachments.Add(card.ToAttachment());
+            await context.PostAsync(reply);
 
             context.Wait(MessageReceivedAsync);
         }
