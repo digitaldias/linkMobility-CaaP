@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Link.CrossCutting", "Link.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Link.Domain", "Link.Domain\Link.Domain.csproj", "{4908D659-89C3-4C6B-B0D6-8E4BCCC39485}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Link.Data.File", "Link.Data.File\Link.Data.File.csproj", "{29E62887-D84B-4BF5-A9DA-E94626C1EDEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{4908D659-89C3-4C6B-B0D6-8E4BCCC39485}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4908D659-89C3-4C6B-B0D6-8E4BCCC39485}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4908D659-89C3-4C6B-B0D6-8E4BCCC39485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29E62887-D84B-4BF5-A9DA-E94626C1EDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29E62887-D84B-4BF5-A9DA-E94626C1EDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29E62887-D84B-4BF5-A9DA-E94626C1EDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29E62887-D84B-4BF5-A9DA-E94626C1EDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,5 +65,6 @@ Global
 		{1FA743B6-DA9D-4F9A-AA8D-181D5D0AB4E6} = {CE7F17E5-6CB3-4A03-BA3C-E5CF785CACC5}
 		{401E4F4C-9FCA-4C53-B58E-10021ACB0202} = {41710AC1-D9C7-43A7-926C-095CE5EF93C7}
 		{4908D659-89C3-4C6B-B0D6-8E4BCCC39485} = {8585CB0D-F8F6-4B3C-B5DA-A0B54BF65AD7}
+		{29E62887-D84B-4BF5-A9DA-E94626C1EDEF} = {CE7F17E5-6CB3-4A03-BA3C-E5CF785CACC5}
 	EndGlobalSection
 EndGlobal
