@@ -1,5 +1,6 @@
 ﻿using Link.Domain.Contracts;
 using Link.Domain.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace Link.Data.Rest
@@ -10,7 +11,19 @@ namespace Link.Data.Rest
         {
             return Task.FromResult(new Package
             {
-                Id = "yes"
+                Id                   = packageId,
+                Status               = "Waiting in Transit",
+                ExpectedDeliveryDate = DateTime.Now.AddDays(2),
+                ShipmentDate         = DateTime.Now.AddDays(-1),
+                Weight               = 3,
+                WeightUnit           = "Kg",
+                Dimensions           = new Dimensions
+                {
+                    Unit   = "cm",
+                    Length = 10,
+                    Width  = 30,
+                    Height = 20
+                }
             });
         }
     }

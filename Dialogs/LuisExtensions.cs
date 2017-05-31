@@ -23,7 +23,7 @@ namespace LogisticBot.Dialogs
             EntityRecommendation packageIdEntity;
             if (luisResult.TryFindEntity("PackageID", out packageIdEntity))
             {
-                context.ConversationData.SetValue<string>("PackageID", packageIdEntity.Entity);
+                context.ConversationData.SetValue("PackageID", packageIdEntity.Entity);
                 return packageIdEntity.Entity;
             }
             return string.Empty;
