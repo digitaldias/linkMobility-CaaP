@@ -56,7 +56,7 @@ namespace LogisticBot.Dialogs
 
         private bool NotReallySureAbout(LuisResult result)
         {
-           return result.TopScoringIntent.Score < 0.9);
+           return result.TopScoringIntent.Score < 0.9;
         }
 
         [LuisIntent("None")]
