@@ -20,6 +20,7 @@ namespace LogisticBot.Dialogs
         [LuisIntent("Track package")]
         public async Task TrackPackage(IDialogContext context, LuisResult result)
         {
+            context.ConversationData.SetValue("LuisResult", result);
             await context.Forward<object>(new TrackPackageDialog(), AfterTrackPackageDialog, context.Activity as IMessageActivity);
         }
 
