@@ -12,7 +12,11 @@ namespace LogisticBot.Dialogs
         }
 
 
-        public static bool TryToExtractPackageIdFromLuisResult(this IDialogContext context)
+        /// <summary>
+        /// This assumes that you have stored a valid LuisResult in context.ConversationData using
+        /// context.ConversationData.SetValue(). It looks for the key "LuisResult". 
+        /// </summary>
+        public static string ExtractPackageId(this IDialogContext context)
         {
             var luisResult = context.ConversationData.GetValue<LuisResult>("LuisResult");
 
@@ -20,9 +24,9 @@ namespace LogisticBot.Dialogs
             if (luisResult.TryFindEntity("PackageID", out packageIdEntity))
             {
                 context.ConversationData.SetValue<string>("PackageID", packageIdEntity.Entity);
-                return true;
+                return packageIdEntity.Entity;
             }
-            return false;
+            return string.Empty;
         }
     }
 }

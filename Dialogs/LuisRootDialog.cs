@@ -28,7 +28,6 @@ namespace LogisticBot.Dialogs
         private async Task AfterTrackPackageDialog(IDialogContext context, IAwaitable<object> result)
         {
             await Task.FromResult<object>(null);
-
             context.Wait(MessageReceived);
         }
 
