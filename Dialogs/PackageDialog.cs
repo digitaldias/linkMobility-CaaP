@@ -1,5 +1,6 @@
 ﻿using Link.Domain.Contracts;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using System;
@@ -22,6 +23,11 @@ namespace LogisticBot.Dialogs
         [LuisIntent("Track package")]
         public async Task TrackPackage(IDialogContext context, LuisResult result)
         {
+            if(result.NotSureEnough())
+            {
+                PromptDialog.Confirm(context, AfterConfirmTrackPackage, "I'm not entirely sure. Did you mean to track a package?");
+            }
+
             //EntityRecommendation recomendation;
 
             //if (result.TryFindEntity("PackageID", out recomendation))
@@ -32,6 +38,25 @@ namespace LogisticBot.Dialogs
             await context.PostAsync("I have your package right here");
 
             context.Done<object>(null);
+        }
+
+        private async Task AfterConfirmTrackPackage(IDialogContext context, IAwaitable<bool> result)
+        {
+            var answerIsYes = await result;
+            if(answerIsYes)
+            {
+
+            }
+            else
+            {
+                await context.PostAsync("Ok, sorry about that. Could you try to rephrase your question?");
+                context.Wait(MessageReceived);
+            }
+        }
+
+        private bool NotReallySureAbout(LuisResult result)
+        {
+           return result.TopScoringIntent.Score < 0.9);
         }
 
         [LuisIntent("None")]
