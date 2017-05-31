@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Link.Domain.Contracts;
+using Link.Domain.Entities;
 using System.Threading.Tasks;
 
 namespace Link.Data.Rest
 {
-    class PackageRepository
+    public class PackageRepository : IPackageRepository
     {
+        public Task<Package> GetPackageByIdAsync(string packageId)
+        {
+            return Task.FromResult(new Package
+            {
+                Id = "yes"
+            });
+        }
     }
 }
