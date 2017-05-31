@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Link.Domain.Contracts;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Builder.Dialogs.Internals;
-using Link.Domain.Contracts;
-using Link.Data.File;
+using System;
+using System.Threading.Tasks;
 
 namespace LogisticBot.Dialogs
 {
@@ -23,16 +21,24 @@ namespace LogisticBot.Dialogs
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var activity = await result;
-            var settings = WebApiApplication.IoCResolver.GetInstance<ISettingsReader>();
+            if (string.IsNullOrEmpty(username))
+            {
+                PromptDialog.Text(context, AfterUsernamePromptAsync, "Before we get started, what is your name?");
+            }
+            else
+            {
+                var activity = await result;
+                var settings = WebApiApplication.IoCResolver.GetInstance<ISettingsReader>();
 
-            await context.Forward<object>(new PackageDialog(settings), AfterPackageDialog, activity);
+                await context.Forward<object>(new LuisRootDialog(settings), AfterLuisRootDialog, activity);
+            }
         }
 
-
-        private async Task OnNameReceived(IDialogContext context, IAwaitable<string> result)
+        private async Task AfterUsernamePromptAsync(IDialogContext context, IAwaitable<string> result)
         {
             username = await result;
+
+            context.UserData.SetValue<string>("UserName", username);
 
             var images = new[] { new CardImage("http://www.benniebos.com/hotair/mei2007/DHL.jpg", "A DHL Balloon") };
             var card = new HeroCard($"Hello, {username}", "Welcome to the DHL Bot!", "I can help you track your packages, reschedule a delivery, cancel a delivery, change delivery address and much much more! Just tell me what you want to do, and I will help you get it done.", images);
@@ -45,25 +51,13 @@ namespace LogisticBot.Dialogs
         }
 
 
-        private async Task AfterPackageDialog(IDialogContext context, IAwaitable<object> result)
+        private async Task AfterLuisRootDialog(IDialogContext context, IAwaitable<object> result)
         {
             await Task.CompletedTask;
             context.Wait(MessageReceivedAsync);
         }
 
 
-        private async Task PackageIdReceived(IDialogContext context, IAwaitable<string> result)
-        {
-            var packageManager = WebApiApplication.IoCResolver.GetInstance<IPackageManager>();
-            var packageId = await result;
-
-            var packageInfo = await packageManager.RetrievePackageInfoAsync(packageId);
-
-            if (packageInfo == null)
-            {
-
-            }
-
-        }
+        
     }
 }
