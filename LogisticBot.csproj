@@ -115,10 +115,11 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\DisplayPackageStatusDialog.cs" />
     <Compile Include="Dialogs\LuisExtensions.cs" />
     <Compile Include="Dialogs\LuisRootDialog.cs" />
+    <Compile Include="Dialogs\ObtainPackageIdDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
-    <Compile Include="Dialogs\TrackPackageDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

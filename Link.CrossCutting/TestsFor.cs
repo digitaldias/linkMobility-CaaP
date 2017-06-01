@@ -18,7 +18,7 @@ namespace Link.CrossCutting
         }
 
 
-        public Mock GetMockFor<TContract>() where TContract : class
+        public Mock<TContract> GetMockFor<TContract>() where TContract : class
         {
             return Mock.Get(AutoMock.Get<TContract>());
         }

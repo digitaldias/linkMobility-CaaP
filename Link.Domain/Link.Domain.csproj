@@ -46,6 +46,7 @@
     <Compile Include="Contracts\IPackageRepository.cs" />
     <Compile Include="Contracts\IPackageValidator.cs" />
     <Compile Include="Contracts\ISettingsReader.cs" />
+    <Compile Include="Entities\Dimensions.cs" />
     <Compile Include="Entities\Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
