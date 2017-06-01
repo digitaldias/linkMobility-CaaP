@@ -70,6 +70,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="QnAMakerDialog, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\QnAMakerDialog.1.1.1\lib\net46\QnAMakerDialog.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=4.4.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\StructureMap.4.4.5\lib\net45\StructureMap.dll</HintPath>
     </Reference>
@@ -120,12 +123,14 @@
     <Compile Include="Dialogs\LuisRootDialog.cs" />
     <Compile Include="Dialogs\ObtainPackageIdDialog.cs" />
     <Compile Include="Dialogs\PackageIdRequester.cs" />
+    <Compile Include="Dialogs\QnADialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Forms\DeliveryAddress.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IoC\RuntimeRegistry.cs" />
+    <Compile Include="MyLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
