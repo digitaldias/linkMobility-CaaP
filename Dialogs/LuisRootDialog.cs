@@ -1,6 +1,8 @@
 ﻿using Link.Domain.Contracts;
 using Link.Domain.Entities;
+using LogisticBot.Forms;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
@@ -22,21 +24,52 @@ namespace LogisticBot.Dialogs
         public async Task TrackPackage(IDialogContext context, LuisResult result)
         {
             context.ConversationData.SetValue("LuisResult", result);
-            await context.Forward<object>(new ObtainPackageIdDialog(), AfterTrackPackageDialog, context.Activity as IMessageActivity);
-                
-        }
-
-
-        private async Task AfterTrackPackageDialog(IDialogContext context, IAwaitable<object> result)
-        {
-            var packageId = await result as string;
-            if (!string.IsNullOrEmpty(packageId))
+            var packageId = context.ExtractPackageId();
+            if(string.IsNullOrEmpty(packageId))
             {
-                await context.Forward(new DisplayPackageStatusDialog(packageId), AfterDisplayPackageStatus, context.Activity as IMessageActivity);
+                await context.Forward<string>(new ObtainPackageIdDialog(), AfterPackageIdForTrackingStatus, context.Activity as IMessageActivity);
             }
             else
             {
-                await context.PostAsync("Is there anything else I can do for you?");
+                var awaitablePackageId = new AwaitableFromItem<string>(packageId);
+                await AfterPackageIdForTrackingStatus(context, awaitablePackageId);
+            }
+        }
+
+
+        [LuisIntent("ChangeAddress")]
+        public async Task ChangeAddress(IDialogContext context, LuisResult result)
+        {
+            var packageId = context.ExtractPackageId();
+           
+            var dialog = FormDialog.FromForm(DeliveryAddress.BuildForm, FormOptions.PromptInStart);  
+            await Task.Run(() => context.Call(dialog, AfterDeliveryAddress));
+        }
+
+
+        private async Task AfterDeliveryAddress(IDialogContext context, IAwaitable<DeliveryAddress> result)
+        {
+            var deliveryAddress = await result;
+            await context.PostAsync("Ok, Let me change that address for you!");
+            var packageManager = WebApiApplication.IoCResolver.GetInstance<IPackageManager>();
+
+            // await packageManager.SetDeliveryAddressAsync(packageId, deliveryAddress);
+
+            context.Wait(MessageReceived);
+        }
+
+
+        private async Task AfterPackageIdForTrackingStatus(IDialogContext context, IAwaitable<string> result)
+        {
+            var packageId = await result;
+
+            if (!string.IsNullOrEmpty(packageId))
+            {
+                context.Call<object>(new DisplayPackageStatusDialog(packageId), AfterDisplayPackageStatus);
+            }
+            else
+            {
+                await context.PostAsync("I'm sorry, but I cannot help you without a valid tracking Id.");
                 context.Wait(MessageReceived);
             }
         }
@@ -44,10 +77,11 @@ namespace LogisticBot.Dialogs
 
         private async Task AfterDisplayPackageStatus(IDialogContext context, IAwaitable<object> result)
         {
-            await Task.FromResult<object>(null);
+            await context.PostAsync("Is there anything else I can help you with?");
             
             context.Wait(MessageReceived);
         }
+
 
 
         [LuisIntent("None")]

@@ -10,49 +10,41 @@ namespace LogisticBot.Dialogs
     [Serializable]
     internal class ObtainPackageIdDialog : IDialog<string>
     {
+        int attempts = 3;
+
+
         public async Task StartAsync(IDialogContext context)
         {
-            await Task.FromResult<object>(null);
+            await context.PostAsync("Please type the tracking number:");
             context.Wait(MessageReceivedAsync);
         }
 
+
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
-            var packageId = context.ExtractPackageId();
-
-            await Task.FromResult<object>(null);
-
-            if (string.IsNullOrEmpty(packageId))
-            {
-                PromptDialog.Text(context, AfterPackageIdRequestAsync, "Please enter your tracking number", "Please try again", 3);
-            }
-            else
-            {
-                context.Done<string>(packageId);
-            }
-        }
-
-        private async Task AfterPackageIdRequestAsync(IDialogContext context, IAwaitable<string> result)
-        {
+            var candidate = (string)await result;
             var validator = WebApiApplication.IoCResolver.GetInstance<IPackageValidator>();
-            var packageId = await result;
 
-            if (packageId.ToLower().Trim().Contains("cancel"))
+            if (validator.IsValidId(candidate))
             {
-                context.Done<string>(string.Empty);
-                return;
-            }
-
-            if (!validator.IsValidId(packageId))
-            {
-                await DisplayTrackingIdHelp(context);
-                PromptDialog.Text(context, AfterPackageIdRequestAsync, "That didn't look like a valid tracking number. Please try again, or type 'Cancel' to go back:");
+                context.ConversationData.SetValue("PackageId", candidate);
+                context.Done(candidate);
             }
             else
             {
-                context.Done(packageId);
+                if(attempts-- > 0)
+                {
+                    await DisplayTrackingIdHelp(context);
+                    context.Wait(MessageReceivedAsync);
+                }
+                else
+                {
+                    context.Fail(new TooManyAttemptsException("Input was either empty or not something I can see as a tracking number"));
+                }
             }
+                            
         }
+
 
 
         private async Task DisplayTrackingIdHelp(IDialogContext context)

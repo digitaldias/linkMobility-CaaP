@@ -119,7 +119,9 @@
     <Compile Include="Dialogs\LuisExtensions.cs" />
     <Compile Include="Dialogs\LuisRootDialog.cs" />
     <Compile Include="Dialogs\ObtainPackageIdDialog.cs" />
+    <Compile Include="Dialogs\PackageIdRequester.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Forms\DeliveryAddress.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

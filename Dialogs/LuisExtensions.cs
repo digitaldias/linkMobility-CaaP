@@ -18,12 +18,15 @@ namespace LogisticBot.Dialogs
         /// </summary>
         public static string ExtractPackageId(this IDialogContext context)
         {
+            if (context.ConversationData.TryGetValue<string>("PackageId", out var packageId))
+                return packageId;
+
             var luisResult = context.ConversationData.GetValue<LuisResult>("LuisResult");
 
             EntityRecommendation packageIdEntity;
             if (luisResult.TryFindEntity("PackageID", out packageIdEntity))
             {
-                context.ConversationData.SetValue("PackageID", packageIdEntity.Entity);
+                context.ConversationData.SetValue("PackageId", packageIdEntity.Entity);
                 return packageIdEntity.Entity;
             }
             return string.Empty;

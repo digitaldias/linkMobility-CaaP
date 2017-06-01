@@ -22,7 +22,11 @@ namespace LogisticBot.Dialogs
         public async Task StartAsync(IDialogContext context)
         {
             await DisplayPackageStatusAsync(context);
+        }
 
+        private async Task MessageRecievedAsync(IDialogContext context, IAwaitable<object> result)
+        {
+            await Task.CompletedTask;
         }
 
 
@@ -36,6 +40,7 @@ namespace LogisticBot.Dialogs
             if (package == null)
             {
                 await context.PostAsync($"I'm sorry, but I couldn't find a package with tracking number '{_packageId}'. ");
+                context.Done<object>(null);
             }
             else
             {
@@ -48,8 +53,8 @@ namespace LogisticBot.Dialogs
                 var message = context.MakeMessage();
                 message.Attachments.Add(heroCard.ToAttachment());
                 await context.PostAsync(message);
-
-                PromptDialog.Confirm(context, AfterAskToShowMoreAsync, "Would you like to see more information about this package?");
+                
+                PromptDialog.Confirm(context, AfterAskToShowMoreAsync, "Would you like to see more information about this package?", "A regular 'yes' or 'no' will do", 3);
             }
         }
 

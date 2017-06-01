@@ -6,5 +6,8 @@ namespace Link.Domain.Contracts
     public interface IPackageManager
     {
         Task<Package> RetrievePackageInfoAsync(string packageId);
+
+
+        Task SetDeliveryAddressAsync(string packageId, Address deliveryAddress);
     }
 }

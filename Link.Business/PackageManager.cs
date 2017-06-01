@@ -29,5 +29,11 @@ namespace Link.Business
 
             return await _exceptionHandler.GetAsync( () => _packageRepository.GetPackageByIdAsync(packageId));
         }
+
+
+        public Task SetDeliveryAddressAsync(string packageId, Address deliveryAddress)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
