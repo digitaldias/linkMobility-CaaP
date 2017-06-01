@@ -18,7 +18,8 @@ namespace LogisticBot.Dialogs
         /// </summary>
         public static string ExtractPackageId(this IDialogContext context)
         {
-            if (context.ConversationData.TryGetValue<string>("PackageId", out var packageId))
+            string packageId = string.Empty;
+            if (context.ConversationData.TryGetValue<string>("PackageId", out packageId))
                 return packageId;
 
             var luisResult = context.ConversationData.GetValue<LuisResult>("LuisResult");
