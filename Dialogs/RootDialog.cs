@@ -56,8 +56,5 @@ namespace LogisticBot.Dialogs
             await Task.CompletedTask;
             context.Wait(MessageReceivedAsync);
         }
-
-
-        
     }
 }
