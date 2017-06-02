@@ -9,7 +9,7 @@ namespace Link.Data.Rest
     {
         public Task<Package> GetPackageByIdAsync(string packageId)
         {
-            return Task.FromResult(new Package
+            var package = new Package
             {
                 Id                   = packageId,
                 Status               = "Waiting in Transit",
@@ -23,8 +23,17 @@ namespace Link.Data.Rest
                     Length = 10,
                     Width  = 30,
                     Height = 20
+                },
+                DeliveryAddress = new Address {
+                    Country = "Sweden",
+                    City = "Malmö",
+                    ZipCode = "123 123",
+                    StreetAddress = "Citadellvägen 13"
                 }
-            });
+            };
+            package.ExpectedDeliveryDate = package.ExpectedDeliveryDate.Date + new TimeSpan(16, 0, 0);
+
+            return Task.FromResult(package);
         }
     }
 }

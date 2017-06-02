@@ -3,6 +3,7 @@ using Link.Domain.Entities;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LogisticBot.Dialogs
@@ -45,19 +46,44 @@ namespace LogisticBot.Dialogs
             else
             {
                 context.ConversationData.SetValue<Package>("CurrentPackage", package);
-                var heroCard = new HeroCard(
-                    "I found your package!",
+                var cardImage = new CardImage("http://www.nyemotorsports.com/storage/DHL_Front_reverse.png", "Image of parcel");                
+                var heroCard  = new HeroCard(
                     $"Status: {package.Status}",
-                    $"Expected delivery: {package.ExpectedDeliveryDate.ToShortDateString()}"
-                );
+                    "",
+                    $"Expected delivery: {package.ExpectedDeliveryDate.ToShortDateString()}",
+                    new[] { cardImage}                
+                );                
                 var message = context.MakeMessage();
-                message.Attachments.Add(heroCard.ToAttachment());
+
+                message.Attachments.Add(heroCard.ToAttachment());                
                 await context.PostAsync(message);
                 
                 PromptDialog.Confirm(context, AfterAskToShowMoreAsync, "Would you like to see more information about this package?", "A regular 'yes' or 'no' will do", 3);
             }
         }
 
+        private ReceiptCard  CreateReceiptCard(Package package)
+        {
+            var facts = new List<Fact> {
+                new Fact("Weight", package.Weight + package.WeightUnit),
+                new Fact("Width",  package.Dimensions.Width + package.Dimensions.Unit),
+                new Fact("Height", package.Dimensions.Height + package.Dimensions.Unit),
+                new Fact("Length", package.Dimensions.Length + package.Dimensions.Unit),
+                new Fact("Delivery Address", package.DeliveryAddress.StreetAddress),
+                new Fact("", package.DeliveryAddress.ZipCode),
+                new Fact("", package.DeliveryAddress.City),
+                new Fact("", package.DeliveryAddress.Country),
+            };
+
+            var receiptItems = new List<ReceiptItem> {
+                new ReceiptItem("Id",            null, null, null, package.Id),
+                new ReceiptItem("Shipment Date", null, null, null, $"{package.ShipmentDate.ToString("ddd, dd MMM yyyy")}" ),
+                new ReceiptItem("Delivery Date", null, null, null, $"{package.ExpectedDeliveryDate.ToString("ddd, dd MMM yyyy")}"),
+                new ReceiptItem("Delivery Time", null, null, null, package.ExpectedDeliveryDate.ToString("HH:mm"))
+            };
+
+            return new ReceiptCard("Parcel Details", receiptItems, facts);                
+        }
 
         private async Task AfterAskToShowMoreAsync(IDialogContext context, IAwaitable<bool> result)
         {
@@ -65,9 +91,12 @@ namespace LogisticBot.Dialogs
 
             if (wantsToSeeMore)
             {
-                //TODO: Make pretty card-based message
-                var package = context.ConversationData.GetValue<Package>("CurrentPackage");
-                await context.PostAsync($"Here are some more details: Weight {package.Weight}{package.WeightUnit}");
+                var package     = context.ConversationData.GetValue<Package>("CurrentPackage");
+                var receiptCard = CreateReceiptCard(package);
+                var message     = context.MakeMessage();
+
+                message.Attachments.Add(receiptCard.ToAttachment());
+                await context.PostAsync(message);
             }
             context.Done<object>(null);
         }

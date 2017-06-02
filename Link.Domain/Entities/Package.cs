@@ -17,5 +17,8 @@ namespace Link.Domain.Entities
         public string WeightUnit { get; set; }
 
         public Dimensions Dimensions { get; set; }
+
+        public Address DeliveryAddress { get; set; }
+
     }
 }
