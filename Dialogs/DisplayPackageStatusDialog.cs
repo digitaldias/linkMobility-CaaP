@@ -75,8 +75,10 @@ namespace LogisticBot.Dialogs
                 new Fact("", package.DeliveryAddress.Country),
             };
 
+            var cardImage = new CardImage("https://www.movematcher.com/wp-content/uploads/2017/03/bubbleman-courier1-974x1451.png?x59881", "In transit");
+
             var receiptItems = new List<ReceiptItem> {
-                new ReceiptItem("Id",            null, null, null, package.Id),
+                new ReceiptItem("Id",            null, null, cardImage, package.Id),
                 new ReceiptItem("Shipment Date", null, null, null, $"{package.ShipmentDate.ToString("ddd, dd MMM yyyy")}" ),
                 new ReceiptItem("Delivery Date", null, null, null, $"{package.ExpectedDeliveryDate.ToString("ddd, dd MMM yyyy")}"),
                 new ReceiptItem("Delivery Time", null, null, null, package.ExpectedDeliveryDate.ToString("HH:mm"))
