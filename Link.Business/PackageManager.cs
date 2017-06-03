@@ -1,9 +1,5 @@
 ﻿using Link.Domain.Contracts;
 using Link.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Link.Business
@@ -13,10 +9,12 @@ namespace Link.Business
         private readonly IPackageValidator _packageValidator;
         private readonly IExceptionHandler _exceptionHandler;
         private readonly IPackageRepository _packageRepository;
+        private readonly IAddressValidator _addressValidator;
 
-        public PackageManager(IPackageValidator packageValidator, IExceptionHandler exceptionHandler, IPackageRepository packageRepository)
+        public PackageManager(IPackageValidator packageValidator, IExceptionHandler exceptionHandler, IPackageRepository packageRepository, IAddressValidator addressValidator)
         {
             _packageValidator = packageValidator;
+            _addressValidator = addressValidator;
             _exceptionHandler = exceptionHandler;
             _packageRepository = packageRepository;
         }
@@ -31,9 +29,15 @@ namespace Link.Business
         }
 
 
-        public Task SetDeliveryAddressAsync(string packageId, Address deliveryAddress)
+        public async Task<Package> SetDeliveryAddressAsync(string packageId, Address deliveryAddress)
         {
-            throw new NotImplementedException();
+            if (!_packageValidator.IsValidId(packageId))
+                return null;
+
+            if (!_addressValidator.IsValid(deliveryAddress))
+                return null;
+
+            return await _exceptionHandler.GetAsync(() => _packageRepository.SetNewDeliveryAddressAsync(packageId, deliveryAddress));
         }
     }
 }

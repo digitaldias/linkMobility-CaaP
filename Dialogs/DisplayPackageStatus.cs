@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace LogisticBot.Dialogs
 {
     [Serializable]
-    public class DisplayPackageStatusDialog : IDialog<object>
+    public class DisplayPackageStatus : IDialog<object>
     {
         private string _packageId;
 
 
-        public DisplayPackageStatusDialog(string packageId)
+        public DisplayPackageStatus(string packageId)
         {
             _packageId = packageId;
         }
@@ -23,11 +23,6 @@ namespace LogisticBot.Dialogs
         public async Task StartAsync(IDialogContext context)
         {
             await DisplayPackageStatusAsync(context);
-        }
-
-        private async Task MessageRecievedAsync(IDialogContext context, IAwaitable<object> result)
-        {
-            await Task.CompletedTask;
         }
 
 

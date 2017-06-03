@@ -5,16 +5,29 @@ namespace Link.CrossCutting
 {
     public class TestsFor<TEntity> where TEntity : class
     {
-        public TEntity Instance { get; set; }
+        protected TEntity Instance { get; set; }
 
-        public MoqAutoMocker<TEntity> AutoMock { get; set; }
+        protected MoqAutoMocker<TEntity> AutoMock { get; set; }
 
 
         public TestsFor()
         {
             AutoMock = new MoqAutoMocker<TEntity>();
 
+            OverrideMocks();
+
             Instance = AutoMock.ClassUnderTest;
+        }
+
+
+        public virtual void OverrideMocks() {  
+        }
+
+
+        public void Inject<TContract>(TContract with) where TContract : class
+        {
+            AutoMock.Container.Release(AutoMock.Get<TContract>());
+            AutoMock.Inject<TContract>(with);            
         }
 
 

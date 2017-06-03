@@ -8,6 +8,6 @@ namespace Link.Domain.Contracts
         Task<Package> RetrievePackageInfoAsync(string packageId);
 
 
-        Task SetDeliveryAddressAsync(string packageId, Address deliveryAddress);
+        Task<Package> SetDeliveryAddressAsync(string packageId, Address deliveryAddress);
     }
 }

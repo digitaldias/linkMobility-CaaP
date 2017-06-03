@@ -7,8 +7,10 @@ namespace Link.Data.Rest
 {
     public class PackageRepository : IPackageRepository
     {
-        public Task<Package> GetPackageByIdAsync(string packageId)
+        public async Task<Package> GetPackageByIdAsync(string packageId)
         {
+            await Task.Delay(TimeSpan.FromSeconds(3));
+
             var package = new Package
             {
                 Id                   = packageId,
@@ -33,7 +35,21 @@ namespace Link.Data.Rest
             };
             package.ExpectedDeliveryDate = package.ExpectedDeliveryDate.Date + new TimeSpan(16, 0, 0);
 
-            return Task.FromResult(package);
+            return package;
+        }
+
+        public async Task<Package> SetNewDeliveryAddressAsync(string packageId, Address deliveryAddress)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(3));
+
+            var package = await GetPackageByIdAsync(packageId);
+
+            if (package == null)
+                return null;
+
+            package.DeliveryAddress = deliveryAddress;
+
+            return package;
         }
     }
 }

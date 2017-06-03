@@ -1,12 +1,5 @@
 ﻿using Link.CrossCutting;
-using Link.Domain.Contracts;
-using Moq;
 using Should;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Link.Business.UnitTests
@@ -45,7 +38,7 @@ namespace Link.Business.UnitTests
         public void IsValidId_PackageIdIsTooLong_ReturnsFalse()
         {
             // Arrange
-            string longString = new string('1', 17);
+            string longString = new string('1', 50);
 
             // Act
             var result = Instance.IsValidId(longString);
@@ -59,8 +52,8 @@ namespace Link.Business.UnitTests
         public void IsValidId_PackageIdIsJustRightLength_ReturnsTrue()
         {
             // Arrange
-            string packageId1 = new string('1', 12);
-            string packageId2 = new string('1', 16);
+            string packageId1 = new string('1', 14);
+            string packageId2 = new string('1', 18);
 
             // Act
             var result1 = Instance.IsValidId(packageId1);
@@ -70,5 +63,34 @@ namespace Link.Business.UnitTests
             result1.ShouldBeTrue("12-character ID failed");
             result2.ShouldBeTrue("16-character ID failed");
         }
+
+
+        [Fact]
+        public void IsValidId_PackageIdContainsOnly4Digits_ReturnsFalse()
+        {
+            // Arrange
+            var badId = "donald 1234 duck";
+
+            // Act
+            var result = Instance.IsValidId(badId);
+
+            // Assert
+            result.ShouldBeFalse();
+        }
+
+
+        [Fact]
+        public void IsValidId_PackageIdContains17Digits_ReturnsFalse()
+        {
+            // Arrange
+            var badId = new string('1', 17);
+
+            // Act
+            var result = Instance.IsValidId(badId);
+
+            // Assert
+            result.ShouldBeFalse();
+        }
+
     }
 }
