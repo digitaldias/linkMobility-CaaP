@@ -1,5 +1,7 @@
 ﻿using Microsoft.Bot.Builder.History;
 using Microsoft.Bot.Connector;
+using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace LogisticBot
@@ -8,8 +10,12 @@ namespace LogisticBot
     {
         public async Task LogAsync(IActivity activity)
         {
-            // TODO: Implement this later
-            // Remember to register this instance in AutoFac config somewhere..:)
+            var activityText = JsonConvert.SerializeObject(activity);
+            
+            Trace.WriteLine(activityText);
+
+            // TODO: Save log in Azure Storage
+
             await Task.CompletedTask;
         }
     }
