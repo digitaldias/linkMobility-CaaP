@@ -4,8 +4,8 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
-using Microsoft.Bot.Connector;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace LogisticBot.Dialogs
@@ -18,11 +18,25 @@ namespace LogisticBot.Dialogs
         {            
         }
 
+        public override Task StartAsync(IDialogContext context)
+        {            
+            Debug.WriteLine("LuisRoot.StartAsync()");
+            return base.StartAsync(context);
+        }
+
 
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
             await context.PostAsync("Oh, I'm sorry, but I have no idea what you just said!");
+
+            EntityRecommendation entity;
+            if(result.TryFindEntity("builtin.datetime.date", out entity))
+            {
+                DateTime.Parse(entity.Entity);
+            }
+
+
             context.Wait(MessageReceived);
         }
 
@@ -32,17 +46,18 @@ namespace LogisticBot.Dialogs
         {
             await Task.CompletedTask;            
             context.ConversationData.SetValue("LuisResult", result);
-            context.Call(new GetPackageId(), AfterPackageIdForTrackingStatus);            
+            context.Call<string>(new GetPackageId(), AfterPackageIdForTrackingStatus);
+
+            context.Wait(MessageReceived);
         }
 
 
         [LuisIntent("ChangeAddress")]
-        public Task ChangeAddress(IDialogContext context, LuisResult result)
+        public async Task ChangeAddress(IDialogContext context, LuisResult result)
         {
+            await Task.CompletedTask;
             context.ConversationData.SetValue("LuisResult", result);
-            context.Forward<string>(new GetPackageId(), AfterPackageIdForAddressChange, context.Activity as IMessageActivity);
-
-            return Task.CompletedTask;
+            context.Call<string>(new GetPackageId(), AfterPackageIdForAddressChange);            
         }
 
 

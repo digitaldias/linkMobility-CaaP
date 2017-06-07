@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace LogisticBot.Dialogs
@@ -11,6 +12,7 @@ namespace LogisticBot.Dialogs
     {
         public async Task StartAsync(IDialogContext context)
         {
+            Debug.WriteLine("AskForPackageId.StartAsync()");
             await context.PostAsync("Type in the package id:");
             context.Wait(MessageReceivedAsync);
         }

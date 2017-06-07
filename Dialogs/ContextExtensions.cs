@@ -28,7 +28,7 @@ namespace LogisticBot.Dialogs
             var luisResult = context.ConversationData.GetValue<LuisResult>("LuisResult");
 
             EntityRecommendation packageIdEntity;
-            if (luisResult.TryFindEntity("PackageID", out packageIdEntity))
+            if (luisResult.TryFindEntity("PackageId", out packageIdEntity))
             {
                 context.ConversationData.SetValue("PackageId", packageIdEntity.Entity);
                 return packageIdEntity.Entity;

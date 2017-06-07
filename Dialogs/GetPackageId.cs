@@ -31,7 +31,7 @@ namespace LogisticBot.Dialogs
 
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var activity = await result;
+            var activity = await result;            
             context.Wait(MessageReceivedAsync);
         }
 

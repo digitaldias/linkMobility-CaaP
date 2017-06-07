@@ -1,8 +1,6 @@
 ﻿using Link.Domain.Entities;
 using Microsoft.Bot.Builder.FormFlow;
-using Microsoft.Bot.Builder.FormFlow.Advanced;
 using System;
-using System.Threading.Tasks;
 
 namespace LogisticBot.Forms
 {
@@ -45,7 +43,7 @@ namespace LogisticBot.Forms
         public static IForm<DeliveryAddress> BuildForm()
         {
             return new FormBuilder<DeliveryAddress>()
-                    .Message("Allright. Where would you like your package delivered?")
+                    .Message("Allright. Where would you like your package delivered? (type 'help' if you get stuck)")
                     .AddRemainingFields()                    
                     .Confirm("Change delivery address to this? {*}")
                     .Build();

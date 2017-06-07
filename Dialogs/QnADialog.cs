@@ -2,19 +2,15 @@
 using Microsoft.Bot.Builder.Dialogs;
 using QnAMakerDialog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace LogisticBot.Dialogs
 {
+    [Serializable]
     public class QnADialog : QnAMakerDialog<object>
     {
-        public QnADialog()
+        public QnADialog(ISettingsReader settings)
         {
-            var settings = WebApiApplication.IoCResolver.GetInstance<ISettingsReader>();
-
             base.SubscriptionKey = settings["QnaMaker.SubscriptionKey"];
             base.KnowledgeBaseId = settings["QnaMaker.KnowledgeBaseId"];
         }

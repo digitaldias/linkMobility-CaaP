@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace LogisticBot.Dialogs
@@ -14,6 +15,7 @@ namespace LogisticBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
+            Debug.WriteLine("LuisRoot.StartAsync()");
             await Task.CompletedTask;
             context.Wait(MessageReceivedAsync);            
         }
@@ -48,10 +50,10 @@ namespace LogisticBot.Dialogs
         }
 
 
-        private Task AfterLuisRootDialog(IDialogContext context, IAwaitable<object> result)
+        private async Task AfterLuisRootDialog(IDialogContext context, IAwaitable<object> result)
         {
+            await Task.CompletedTask;
             context.Wait(MessageReceivedAsync);
-            return Task.CompletedTask;
         }
     }
 }
