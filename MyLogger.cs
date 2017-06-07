@@ -14,7 +14,7 @@ namespace LogisticBot
             
             Trace.WriteLine(activityText);
 
-            // TODO: Save log in Azure Storage
+            // TODO: Save log in Azure Storage. Connect IActivityLogger to the bot framework's IoC container.
 
             await Task.CompletedTask;
         }
