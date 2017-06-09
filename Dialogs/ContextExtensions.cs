@@ -12,6 +12,21 @@ namespace LogisticBot.Dialogs
         }
 
 
+        public static string GetPackageId(this IDialogContext context)
+        {
+            if (!context.ConversationData.ContainsKey("LuisResult"))
+                return string.Empty;
+
+            var luisResult = context.ConversationData.GetValue<LuisResult>("LuisResult");
+
+            EntityRecommendation entity;
+            if (luisResult.TryFindEntity("PackageID", out entity))
+                return entity.Entity;
+
+            return string.Empty;
+        }
+
+
         /// <summary>
         /// This assumes that you have stored a valid LuisResult in context.ConversationData using
         /// context.ConversationData.SetValue(). It looks for the key "LuisResult". 
