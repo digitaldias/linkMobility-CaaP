@@ -47,7 +47,16 @@ namespace LogisticBot.Dialogs
         {
             await Task.CompletedTask;            
             context.ConversationData.SetValue("LuisResult", result);
-            context.Call<string>(new GetPackageId(), AfterPackageIdForTrackingStatus);            
+            var packageId = context.GetPackageId();
+
+            if(string.IsNullOrEmpty(packageId))
+            {
+                context.Call<string>(new GetPackageId(), AfterPackageIdForTrackingStatus);            
+            }
+            else
+            {
+                context.Call(new DisplayPackageStatus(packageId), AfterDisplayPackageStatus);
+            }
         }
 
 
