@@ -1,5 +1,4 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 using System;
 using System.Threading.Tasks;
 
@@ -18,24 +17,17 @@ namespace LogisticBot.Dialogs
 
 
         public async Task StartAsync(IDialogContext context)
-        {            
-            await context.PostAsync($"Shall I reuse package '{_packageId}'?");
-            context.Wait(MessageReceivedAsync);
+        {
+            await Task.CompletedTask;
+            PromptDialog.Confirm(context, AfterConfirmationAsync, $"Shall I reuse package {_packageId}?", "Oops, try again", 3, PromptStyle.Auto);                     
         }
 
 
-        public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task AfterConfirmationAsync(IDialogContext context, IAwaitable<bool> result)
         {
-            var message = (await result).Text;
-            var answer = message.ToLower().Trim();
-            var positiveAnswers = new[] { "yes", "y", "sure", "ok", "yeah", "true", "positive", "confirm", "absolutely" };
+            var reuse = await result;
+            context.Done(reuse);
 
-            foreach (var choice in positiveAnswers)
-            {
-                if (answer.Contains(choice))
-                    context.Done(true);
-            }
-            context.Done(false);
         }
     }
 }

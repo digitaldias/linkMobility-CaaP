@@ -1,5 +1,4 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 using System;
 using System.Threading.Tasks;
 
@@ -14,6 +13,8 @@ namespace LogisticBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {            
+            await Task.CompletedTask;            
+
             _userName    = context.FindUserName();
             _packageId   = context.FindPackageId();
 
@@ -23,16 +24,8 @@ namespace LogisticBot.Dialogs
             }
             else
             {
-                context.Call(new AskForPackageId(), DisplayPackageStatusAsync);
+                context.Call<string>(new AskForPackageId(), AfterAskingForPackageIdAsync);
             }
-            await Task.CompletedTask;            
-        }
-
-
-        public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var activity = await result;            
-            context.Wait(MessageReceivedAsync);
         }
 
 
@@ -45,23 +38,15 @@ namespace LogisticBot.Dialogs
             }
             else
             {
-                context.Call(new AskForPackageId(), DisplayPackageStatusAsync);                
+                context.Call(new AskForPackageId(), AfterAskingForPackageIdAsync);                
             }
         }
 
 
-
-        private async Task DisplayPackageStatusAsync(IDialogContext context, IAwaitable<string> result)
+        private async Task AfterAskingForPackageIdAsync(IDialogContext context, IAwaitable<string> result)
         {
-            _packageId = await result;
-            context.Call(new DisplayPackageStatus(_packageId), AfterDisplayPackageStatus);
-        }
-
-
-        private async Task AfterDisplayPackageStatus(IDialogContext context, IAwaitable<object> result)
-        {
-            await result;
-            context.Done(_packageId);
+            
+            context.Done(await result);
         }
     }
 }
