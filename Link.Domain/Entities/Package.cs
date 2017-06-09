@@ -20,5 +20,6 @@ namespace Link.Domain.Entities
 
         public Address DeliveryAddress { get; set; }
 
+        public string CurrentLocation { get; set; }
     }
 }

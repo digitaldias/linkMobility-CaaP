@@ -44,7 +44,7 @@ namespace LogisticBot.Dialogs
                 var cardImage = new CardImage("http://www.nyemotorsports.com/storage/DHL_Front_reverse.png", "Image of parcel");                
                 var heroCard  = new HeroCard(
                     $"Status: {package.Status}",
-                    "",
+                    $"Currently in: {package.CurrentLocation}",
                     $"Expected delivery: {package.ExpectedDeliveryDate.ToShortDateString()}",
                     new[] { cardImage}                
                 );                
@@ -64,6 +64,7 @@ namespace LogisticBot.Dialogs
                 new Fact("Width",  package.Dimensions.Width + package.Dimensions.Unit),
                 new Fact("Height", package.Dimensions.Height + package.Dimensions.Unit),
                 new Fact("Length", package.Dimensions.Length + package.Dimensions.Unit),
+                new Fact("Current Location", package.CurrentLocation),
                 new Fact("Delivery Address", package.DeliveryAddress.StreetAddress),
                 new Fact("", package.DeliveryAddress.ZipCode),
                 new Fact("", package.DeliveryAddress.City),

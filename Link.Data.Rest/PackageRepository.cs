@@ -17,6 +17,7 @@ namespace Link.Data.Rest
                 Status               = "Waiting in Transit",
                 ExpectedDeliveryDate = DateTime.Now.AddDays(2),
                 ShipmentDate         = DateTime.Now.AddDays(-1),
+                CurrentLocation      = "Peru, Lima",
                 Weight               = 3,
                 WeightUnit           = "Kg",
                 Dimensions           = new Dimensions
