@@ -4,6 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -46,9 +47,7 @@ namespace LogisticBot.Dialogs
         {
             await Task.CompletedTask;            
             context.ConversationData.SetValue("LuisResult", result);
-            context.Call<string>(new GetPackageId(), AfterPackageIdForTrackingStatus);
-
-            context.Wait(MessageReceived);
+            context.Call<string>(new GetPackageId(), AfterPackageIdForTrackingStatus);            
         }
 
 
@@ -99,13 +98,15 @@ namespace LogisticBot.Dialogs
             }
             else
             {
-                await context.PostAsync("I'm sorry, but I cannot help you without a valid tracking Id.");                
+                await context.PostAsync("I'm sorry, but I cannot help you without a valid tracking Id.");
+                context.Wait(MessageReceived);
             }            
         }
 
 
         private async Task AfterDisplayPackageStatus(IDialogContext context, IAwaitable<object> result)
         {
+            var notUsed = await result as Activity;
             await context.PostAsync("Is there anything else I can help you with?");
             
             context.Wait(MessageReceived);
